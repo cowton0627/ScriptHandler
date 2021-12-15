@@ -83,17 +83,24 @@ class ViewController: UIViewController {
             cell.textLabel?.font = UIFont.systemFont(ofSize: 20)
             cell.textLabel?.text = itemIdentifier.name
             cell.textLabel?.textColor = UIColor.random()
+            
             return cell
         })
+
 //        setupTrips()
         
         // 測試barItem的動作
-        let leftBar = UIBarButtonItem.init(barButtonSystemItem: .undo, target: self, action: #selector(ReorderButtonClick))
+        let leftBar = UIBarButtonItem.init(barButtonSystemItem: .edit, target: self, action: #selector(ReorderButtonClick))
         navigationItem.leftBarButtonItem = leftBar
+        
     }
     // 測試barItem的動作
     @objc func ReorderButtonClick() {
-        tableView.setEditing(!tableView.isEditing, animated: true)
+//        tableView.setEditing(!tableView.isEditing, animated: true)
+        
+        let vc = SecondViewController()
+        show(vc, sender: nil)
+        
     }
 
     @objc func didTapAdd() {
@@ -139,6 +146,7 @@ class ViewController: UIViewController {
     private func setupTableView() {
         view.addSubview(tableView)
         tableView.delegate = self
+        tableView.dataSource = self
         tableView.backgroundColor = .lightGray
         tableView.layer.cornerRadius = 10
     }
@@ -166,8 +174,12 @@ extension ViewController: UITableViewDelegate {
 //
 ////        tripSet.remove(at: indexPath.row)
 ////        updateDataSource()
+//        if tableView.isEditing {
+//            return .none
+//        } else {
+//            return .delete
+//        }
 //
-//        return .delete
 //    }
 //    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
 //        if editingStyle == .delete {
@@ -199,13 +211,13 @@ extension ViewController: UITableViewDelegate {
 //            completionHandler(true)
         }
         deleteAction.backgroundColor = .red
-        deleteAction.image = UIImage(systemName: "pencil")
         
         let otherAction = UIContextualAction(style: .destructive, title: "另") { (ac, view, completionHandler) in
 
             completionHandler(true) // 採用方能在無動作時回彈
         }
-        otherAction.backgroundColor = .blue
+        otherAction.backgroundColor = .systemBlue
+        otherAction.image = UIImage(systemName: "pencil")
         
         let configuration = UISwipeActionsConfiguration(actions: [deleteAction, otherAction])
         // 避免滑到底觸發第一個action
@@ -228,6 +240,10 @@ extension ViewController: UITableViewDataSource {
         true
     }
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+//        let moveItem = tripSet[sourceIndexPath.row]
+//        tripSet.remove(at: sourceIndexPath.row)
+//        tripSet.insert(moveItem, at: destinationIndexPath.row)
+      
         print(tripSet)
     }
 }
